@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <!--Define arguments-->
+  <arg name="world"		default="empty"/>
+  <arg name="paused"		default="true"/>
+  <arg name="use_sim_time"	default="true"/>
+  <arg name="gui"		default="true"/>
+  <arg name="headless"		default="false"/>
+  <arg name="debug"		default="false"/>
+
+  <!--Load the world environtment-->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name"	value="$(find conveyorbelt_models)/worlds/conveyorBelt.world"/>
+    <arg name="paused"		value="$(arg paused)"/>
+    <arg name="use_sim_time"	value="$(arg use_sim_time)"/>
+    <arg name="gui"		value="$(arg gui)"/>
+    <arg name="headless"	value="$(arg headless)"/>
+    <arg name="debug"		value="$(arg debug)"/>
+  </include>
+
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 40" />
+  <node 
+    name="sm_skripsi" 
+    pkg="conveyorbelt_models" 
+    type="sm_skripsi.py" 
+    output="screen" />
+  <node
+    name="sm_viewer"
+    pkg="smach_viewer"
+    type="smach_viewer.py" />
+  <node
+    name="spawn_convey1_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find conveyorbelt_models)/models/conveyor_belt_model.urdf -urdf -model conveyor_belt_model -x 0.0 -y 0.0 -z 0.055"
+    output="screen" />
+  <node
+    name="spawn_convey2_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find conveyorbelt_models)/models/conveyor_belt_model2.urdf -urdf -model conveyor_belt_model2 -x 0.098 -y 0.2165 -z 0.151"
+    output="screen" />
+  <!--node
+    name="spawn_bearing_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find conveyorbelt_models)/models/bearing_model.urdf -urdf -model bearing_model -x 0.098 -y 0.327 -z 0.155"
+    output="screen" />
+  <node
+    name="spawn_box_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find conveyorbelt_models)/models/box_model.urdf -urdf -model box_model -x -0.12 -y 0.00 -z 0.056"
+    output="screen" /-->
+  <!--node
+    name="fake_joint_calibration"
+    pkg="rostopic"
+    type="rostopic"
+    args="pub /calibrated std_msgs/Bool true" /-->
+
+</launch>

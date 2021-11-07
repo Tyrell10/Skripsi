@@ -1,0 +1,2 @@
+bearing_model:box_model:conveyor_belt_model:conveyor_belt_model2:conveyorbelt_models:gazebo_ros_pkgs/gazebo_dev:gazebo_ros_pkgs/gazebo_msgs:gazebo_ros_pkgs/gazebo_plugins:gazebo_ros_pkgs/gazebo_ros:gazebo_ros_pkgs/gazebo_ros_control:gazebo_ros_pkgs/gazebo_ros_pkgs:plannar_mover:smach_viewer
+-DCATKIN_DEVEL_PREFIX=/home/tyrell/conveyorBelt_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tyrell/conveyorBelt_ws/install -G Unix Makefiles
