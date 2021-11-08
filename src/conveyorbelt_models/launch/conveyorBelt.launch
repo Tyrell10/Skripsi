@@ -6,7 +6,7 @@
   <arg name="paused"		default="true"/>
   <arg name="use_sim_time"	default="true"/>
   <arg name="gui"		default="true"/>
-  <arg name="headless"		default="false"/>
+  <arg name="headless"		default="true"/>
   <arg name="debug"		default="false"/>
 
   <!--Load the world environtment-->
@@ -50,13 +50,13 @@
     pkg="gazebo_ros"
     type="spawn_model"
     args="-file $(find conveyorbelt_models)/models/bearing_model.urdf -urdf -model bearing_model -x 0.098 -y 0.327 -z 0.155"
-    output="screen" />
+    output="screen" /-->
   <node
     name="spawn_box_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find conveyorbelt_models)/models/box_model.urdf -urdf -model box_model -x -0.12 -y 0.00 -z 0.056"
-    output="screen" /-->
+    args="-file $(find conveyorbelt_models)/models/box_store_model.urdf -urdf -model box_store_model -x -0.12 -y 0.327 -z 0.00"
+    output="screen" />
   <!--node
     name="fake_joint_calibration"
     pkg="rostopic"

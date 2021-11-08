@@ -11,6 +11,8 @@ import paho.mqtt.client as mqtt
 from conveyorbelt_models.msg import *
 from geometry_msgs.msg import *
 from gazebo_msgs.srv import DeleteModel, SpawnModel
+from gazebo_msgs.msg import ModelState
+from gazebo_msgs.srv import SetModelState
 
 # Publisher node and msgs
 convey1_cmd_pub = None
@@ -25,6 +27,9 @@ box_cmd_msg = box_cmd_vel()
 # Service node
 srv_spawn_model = None
 srv_delete_model = None
+srv_set_state = None
+first_box = True
+first_obj = True
 
 # MQTT param
 client1 = None
@@ -58,9 +63,10 @@ last_obj_detect = False
 model_name1 = "box_model"
 model_name2 = "bearing_model"
 model_type = "urdf"
-model_list = []
+bearing_list = []
 object_position = (0.098, 0.327, 0.155)
 box_position = (-0.12, -0.012, 0.056)
+bearing_store = (-0.12, 0.327, 0.012)
 object_pose = Pose()
 box_pose = Pose()
 object_pose.position.x = float(object_position[0])
@@ -206,23 +212,26 @@ class Conveyor1(smach.State):
             # publish /convey1_cmd_vel -> x
             # publish /plannar_node/box_cmd_vel -> x
 
-            if isCounter_finish :
-                valid_delete_box = rospy.get_rostime() - delete_box_time
-                rospy.loginfo("delete_time %f", valid_delete_box.secs)
+#            if isCounter_finish :
+#                valid_delete_box = rospy.get_rostime() - delete_box_time
+#                rospy.loginfo("delete_time %f", valid_delete_box.secs)
 
-                if valid_delete_box.secs >= 4.0 and delete_flag :
-                    # delete bearing_model
-                    try :
-                        for i in range(len(model_list)-1, 0) :
-                            res_delete = srv_delete_model(model_list[i])
+#                if valid_delete_box.secs >= 4.0 and delete_flag :
+#                    # delete bearing_model
+#                    try :
+#                        for i in range(len(model_list)-1, 0, -1) :
+#                            rospy.loginfo(model_list)
+#                            res_delete = srv_delete_model(model_list[i])
 
-                            if res_delete.success == True:
-                                rospy.loginfo(res_delete.status_message + " " + model_list[i])
-                            else:
-                                print("Error: model %s not spawn. error message = "% model_list[i] + res_spawn.status_message)
+#                            if res_delete.success == True:
+#                                rospy.loginfo(res_delete.status_message + " " + model_list[i])
+#                                model_list.pop(i)
+#                                rospy.sleep(2)
+#                            else:
+#                                print("Error: model %s not spawn. error message = "% model_list[i] + res_spawn.status_message)
 
-                    except rospy.ServiceException as e :
-                        print("Delete Model service call failed: {0}".format(e))
+#                    except rospy.ServiceException as e :
+#                        print("Delete Model service call failed: {0}".format(e))
 
 #                    if last_obj_detect and bearing_i > 1:
 #                        res_delete = srv_delete_model(model_name2+str(bearing_i-1))
@@ -255,7 +264,7 @@ class Conveyor1(smach.State):
 #                        else:
 #                            print "Error: model %s not spawn. error message = "% model_name1 + res_spawn.status_message
 
-                    delete_flag = False
+#                    delete_flag = False
 
             convey1_cmd_msg.linear.x = 0.2
             convey1_cmd_msg.linear.y = 0.0
@@ -385,7 +394,8 @@ class Ready(smach.State):
 
 def on_message(client, ud, msg) :
     global isBox_detect, isStart, isStop, isConveyor1_on, isConveyor2_on, isCounter_finish, box_i, delete_box_time
-    global convey1_msgs_time, convey2_msgs_time, apple_count, srv_spawn_model, srv_delete_model, model_list
+    global convey1_msgs_time, convey2_msgs_time, apple_count, srv_spawn_model, srv_delete_model, bearing_list, first_box
+    global srv_set_state
 
     """
     1 : Conveyor On
@@ -421,15 +431,60 @@ def on_message(client, ud, msg) :
         elif(msgs == "3") :
 #            pass
             # Spawn model
-            box_i += 1
-            last_box_detect = True
-            res_spawn = srv_spawn_model(model_name1+str(box_i), box_xml_string, "/", box_pose, "world")
+#            box_i += 1
+#            last_box_detect = True
 
-            if res_spawn.success == True:
-                rospy.loginfo(res_spawn.status_message + " " + model_name1+str(box_i))
-                model_list.append(model_name1+str(box_i))
-            else:
-                print "Error: model %s not spawn. error message = "% model_name1 + res_spawn.status_message
+            if first_box :
+                res_spawn = srv_spawn_model(model_name1, box_xml_string, "/", box_pose, "world")
+
+                if res_spawn.success == True:
+                    rospy.loginfo(res_spawn.status_message + " " + model_name1)#+str(box_i))
+                    first_box = False
+#                    if box_i == 2 :
+#                        first_box = False
+#                        box_i = 0
+                else:
+                    print "Error: model %s not spawn. error message = "% model_name1 + res_spawn.status_message
+            else :
+                state_msg = ModelState()
+                state_msg.model_name = model_name1#+str(box_i)
+                state_msg.pose.position.x = float(box_position[0])
+                state_msg.pose.position.y = float(box_position[1])
+                state_msg.pose.position.z = float(box_position[2])
+                state_msg.pose.orientation.x = 0
+                state_msg.pose.orientation.y = 0
+                state_msg.pose.orientation.z = 0
+                state_msg.pose.orientation.w = 0
+
+                try:
+                    resp = srv_set_state(state_msg)
+#                    if box_i == 2 :
+#                        box_i = 0
+
+                except rospy.ServiceException, e:
+                    print "Service call failed: %s" % e
+
+                for i in range(0, 3) :
+                    bearing_list.append(bearing_list[i])
+
+                for i in range(2,-1,-1) :
+                    rospy.loginfo(bearing_list)
+                    state_msg.model_name = bearing_list[i]
+                    state_msg.pose.position.x = float(bearing_store[0])
+                    state_msg.pose.position.y = float(bearing_store[1])
+                    state_msg.pose.position.z = float(bearing_store[2]+i*0.007)
+                    state_msg.pose.orientation.x = 0
+                    state_msg.pose.orientation.y = 0
+                    state_msg.pose.orientation.z = 0
+                    state_msg.pose.orientation.w = 0
+
+                    try:
+                        resp = srv_set_state(state_msg)
+                        bearing_list.pop(i)
+
+                    except rospy.ServiceException, e:
+                        print "Service call failed: %s" % e
+
 
         elif(msgs == "4") :
             ## Publish Start to Conveyor2
@@ -446,8 +501,8 @@ def on_message(client, ud, msg) :
 
 
 def on_message2(client, ud, msg) :
-    global isStart, isStop, isConveyor2_on, isCounter_finish, bearing_i, delete_obj_time
-    global convey2_msgs_time, srv_spawn_model, srv_delete_model, delete_flag, model_list
+    global isStart, isStop, isConveyor2_on, isCounter_finish, bearing_i, delete_obj_time, srv_set_state
+    global convey2_msgs_time, srv_spawn_model, srv_delete_model, delete_flag, bearing_list, first_obj
 
     """
     1 : Conveyor On
@@ -483,14 +538,37 @@ def on_message2(client, ud, msg) :
 #            pass
             # Spawn model
             bearing_i += 1
-            last_obj_detect = True
-            res_spawn = srv_spawn_model(model_name2+str(bearing_i), object_xml_string, "/", object_pose, "world")
+#            last_obj_detect = True
 
-            if res_spawn.success == True:
+            if bearing_i <= 5 and first_obj :
+                res_spawn = srv_spawn_model(model_name2+str(bearing_i), object_xml_string, "/", object_pose, "world")
+
+                if res_spawn.success :
                     rospy.loginfo(res_spawn.status_message + " " + model_name2+str(bearing_i))
-                    model_list.append(model_name2+str(bearing_i))
-            else:
+                    bearing_list.append(model_name2+str(bearing_i))
+                    if bearing_i == 5 :
+                        first_obj = False
+                        bearing_i = 0
+                else:
                     print "Error: model %s not spawn. error message = "% model_name2 + res_spawn.status_message
+            else :
+                state_msg = ModelState()
+                state_msg.model_name = model_name2 + str(bearing_i)
+                state_msg.pose.position.x = float(object_position[0])
+                state_msg.pose.position.y = float(object_position[1])
+                state_msg.pose.position.z = float(object_position[2])
+                state_msg.pose.orientation.x = 0
+                state_msg.pose.orientation.y = 0
+                state_msg.pose.orientation.z = 0
+                state_msg.pose.orientation.w = 0
+
+                try:
+                    resp = srv_set_state(state_msg)
+                    if bearing_i == 5 :
+                        bearing_i = 0
+
+                except rospy.ServiceException, e:
+                    print "Service call failed: %s" % e
 
         elif(msgs == "4") :
             ## Publish Start to Conveyor1
@@ -498,7 +576,7 @@ def on_message2(client, ud, msg) :
 
             isConveyor2_on = False
             isCounter_finish = True
-            delete_flag = True
+#            delete_flag = True
 
 #            ret = client1.publish(convey1_client_topic, "start", qos=1)
 
@@ -550,7 +628,7 @@ def subscribing_convey2() :
 
 def main():
     global client1, client2, client3, convey1_cmd_pub, convey2_cmd_pub, object_cmd_pub, box_cmd_pub
-    global srv_spawn_model, srv_delete_model
+    global srv_spawn_model, srv_delete_model, srv_set_state
 
     rospy.init_node("Monitor_SM")
 
@@ -590,7 +668,8 @@ def main():
     rospy.wait_for_service("/gazebo/spawn_urdf_model")
 
     srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
-    srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
+#    srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
+    srv_set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
 
 #    res_spawn = srv_spawn_model(model_name1, box_xml_string, "/", box_pose, "world")
 
