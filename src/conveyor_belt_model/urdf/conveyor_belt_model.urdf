@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="conveyor_belt_model">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00042305 -2.7756E-17 -0.017041"
+        rpy="0 0 0" />
+      <mass
+        value="0.7" />
+      <inertia
+        ixx="0.00042164"
+        ixy="-7.7249E-19"
+        ixz="-6.2679E-08"
+        iyy="0.0065622"
+        iyz="1.5698E-19"
+        izz="0.0065969" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="motor_link">
+    <inertial>
+      <origin
+        xyz="8.1799E-05 0.070043 0.00025174"
+        rpy="0 0 0" />
+      <mass
+        value="0.3" />
+      <inertia
+        ixx="0.00035614"
+        ixy="-9.4003E-10"
+        ixz="-2.8232E-11"
+        iyy="5.027E-05"
+        iyz="-2.893E-09"
+        izz="0.00035614" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/motor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/motor_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="motor_joint"
+    type="continuous">
+    <origin
+      xyz="0.14492 -0.07 -0.020252"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="motor_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      effort="1"
+      velocity="2.2" />
+  </joint>
+  <link
+    name="another_link">
+    <inertial>
+      <origin
+        xyz="-1.9429E-16 -0.07 8.3267E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.3" />
+      <inertia
+        ixx="0.00035694"
+        ixy="-4.7434E-20"
+        ixz="5.3114E-21"
+        iyy="5.0271E-05"
+        iyz="4.8365E-19"
+        izz="0.00035694" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/another_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/another_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="another_joint"
+    type="continuous">
+    <origin
+      xyz="-0.145 0.07 -0.02"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="another_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      effort="1"
+      velocity="2.2" />
+  </joint>
+  <link
+    name="belt_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.5" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/belt_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyor_belt_model/meshes/belt_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="belt_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="belt_link" />
+    <axis
+      xyz="0 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="1"
+      velocity="2.2" />
+  </joint>
+</robot>

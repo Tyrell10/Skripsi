@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot
+  name="conveyor_belt_model2">
+  <link
+    name="base_link_convey2">
+    <inertial>
+      <origin
+        xyz="-0.00043474 0.026209 -0.060514"
+        rpy="0 0 0" />
+      <mass
+        value="1.8" />
+      <inertia
+        ixx="0.014356"
+        ixy="2.186E-19"
+        ixz="1.0113E-20"
+        iyy="0.0026741"
+        iyz="0.00050569"
+        izz="0.012149" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/base_link_convey2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/base_link_convey2.STL" />
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+	    <slip1>0.0</slip1>
+	    <slip2>0.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+  </link>
+  <gazebo 
+    reference="base_link_convey2">
+    <material>Gazebo/WhiteGlow</material>
+  </gazebo>
+  <link
+    name="convey2_motor_link">
+    <inertial>
+      <origin
+        xyz="-0.070043 0.00025674 -6.4407E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="5.027E-05"
+        ixy="2.9505E-09"
+        ixz="-7.4016E-10"
+        iyy="0.00035614"
+        iyz="2.2671E-11"
+        izz="0.00035614" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_motor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_motor_link.STL" />
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>0.2</mu>
+            <mu2>0.2</mu2>
+	    <slip1>0.0</slip1>
+	    <slip2>0.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+  </link>
+  <gazebo 
+    reference="convey2_motor_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <joint
+    name="convey2_motor_joint"
+    type="continuous">
+    <origin
+      xyz="0.069565 -0.15776 -0.020936"
+      rpy="0 0 0" />
+    <parent
+      link="base_link_convey2" />
+    <child
+      link="convey2_motor_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      effort="100"
+      velocity="2.2" />
+    <joint_properties damping="0.0"/>
+  </joint>
+  <link
+    name="convey2_another_link">
+    <inertial>
+      <origin
+        xyz="-0.07 2.2204E-15 -6.2866E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="5.0271E-05"
+        ixy="-1.0048E-20"
+        ixz="-2.5529E-22"
+        iyy="0.00035694"
+        iyz="3.288E-21"
+        izz="0.00035694" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_another_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_another_link.STL" />
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>0.2</mu>
+            <mu2>0.2</mu2>
+	    <slip1>0.0</slip1>
+	    <slip2>0.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+  </link>
+  <gazebo 
+    reference="convey2_another_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <joint
+    name="convey2_another_joint"
+    type="continuous">
+    <origin
+      xyz="0.069565 0.1575 -0.021"
+      rpy="0 0 0" />
+    <parent
+      link="base_link_convey2" />
+    <child
+      link="convey2_another_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      effort="100"
+      velocity="2.2" />
+    <joint_properties damping="0.0"/>
+  </joint>
+  <link
+    name="convey2_belt_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.2" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_belt_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://conveyorbelt_models/meshes/convey2_belt_link.STL" />
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>0.2</mu>
+            <mu2>0.2</mu2>
+	    <slip1>0.0</slip1>
+	    <slip2>0.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+  </link>
+  <gazebo 
+    reference="convey2_belt_link">
+    <material>Gazebo/Grass</material>
+  </gazebo>
+  <joint
+    name="convey2_belt_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link_convey2" />
+    <child
+      link="convey2_belt_link" />
+    <axis
+      xyz="0 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="100"
+      velocity="2.2" />
+    <joint_properties damping="0.0"/>
+  </joint>
+
+<gazebo>
+  <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+
+    <!-- Plugin update rate in Hz -->
+    <updateRate>10</updateRate>
+
+    <!-- Name of left joint, defaults to `left_joint` -->
+    <leftJoint>convey2_another_joint</leftJoint>
+
+    <!-- Name of right joint, defaults to `right_joint` -->
+    <rightJoint>convey2_motor_joint</rightJoint>
+
+    <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
+    <wheelSeparation>0.315</wheelSeparation>
+
+    <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
+    <wheelDiameter>0.08</wheelDiameter>
+
+    <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
+    <wheelAcceleration>2.2</wheelAcceleration>
+
+    <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
+    <wheelTorque>1000</wheelTorque>
+
+    <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
+    <commandTopic>convey2_cmd_vel</commandTopic>
+
+    <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` >
+    <odometryTopic>odom</odometryTopic -->
+
+    <!-- Odometry frame, defaults to `odom` >
+    <odometryFrame>odom</odometryFrame -->
+
+    <!-- Robot frame to calculate odometry from, defaults to `base_footprint` -->
+    <!--robotBaseFrame>base_footprint</robotBaseFrame-->
+
+    <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+    <!--odometrySource>1</odometrySource-->
+
+    <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+    <publishWheelTF>true</publishWheelTF>
+
+    <!-- Set to true to publish transforms for the odometry, defaults to true >
+    <publishOdom>true</publishOdom -->
+
+    <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+    <publishWheelJointState>true</publishWheelJointState>
+
+    <!-- Set to true to swap right and left wheels, defaults to true -->
+    <legacyMode>false</legacyMode>
+  </plugin>
+</gazebo>
+
+</robot>

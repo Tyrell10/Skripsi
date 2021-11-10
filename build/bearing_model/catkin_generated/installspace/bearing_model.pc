@@ -1,0 +1,8 @@
+prefix=/home/tyrell/conveyorBelt_ws/install
+
+Name: bearing_model
+Description: Description of bearing_model
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
