@@ -66,7 +66,7 @@ model_type = "urdf"
 bearing_list = []
 object_position = (0.098, 0.327, 0.155)
 box_position = (-0.12, -0.012, 0.056)
-bearing_store = (0.3, 0.327, 0.0035)
+bearing_store = (-0.12, 0.327, 0.012)
 object_pose = Pose()
 box_pose = Pose()
 object_pose.position.x = float(object_position[0])
@@ -431,37 +431,22 @@ def on_message(client, ud, msg) :
         elif(msgs == "3") :
 #            pass
             # Spawn model
-            box_i += 1
-            last_box_detect = True
+#            box_i += 1
+#            last_box_detect = True
 
-            if box_i <= 2 and first_box :
-                res_spawn = srv_spawn_model(model_name1+str(box_i), box_xml_string, "/", box_pose, "world")
+            if first_box :
+                res_spawn = srv_spawn_model(model_name1, box_xml_string, "/", box_pose, "world")
 
                 if res_spawn.success == True:
-                    rospy.loginfo(res_spawn.status_message + " " + model_name1+str(box_i))
-                    if box_i == 2 :
-                        first_box = False
-                        box_i = 0
+                    rospy.loginfo(res_spawn.status_message + " " + model_name1)#+str(box_i))
+                    first_box = False
+#                    if box_i == 2 :
+#                        first_box = False
+#                        box_i = 0
                 else:
                     print "Error: model %s not spawn. error message = "% model_name1 + res_spawn.status_message
             else :
                 state_msg = ModelState()
-                state_msg.model_name = model_name1+str(box_i)
-                state_msg.pose.position.x = float(box_position[0])
-                state_msg.pose.position.y = float(box_position[1])
-                state_msg.pose.position.z = float(box_position[2])
-                state_msg.pose.orientation.x = 0
-                state_msg.pose.orientation.y = 0
-                state_msg.pose.orientation.z = 0
-                state_msg.pose.orientation.w = 0
-
-                try:
-                    resp = srv_set_state(state_msg)
-                    if box_i == 2 :
-                        box_i = 0
-
-                except rospy.ServiceException, e:
-                    print "Service call failed: %s" % e
 
                 for i in range(0, 3) :
                     bearing_list.append(bearing_list[i])
@@ -484,6 +469,22 @@ def on_message(client, ud, msg) :
                     except rospy.ServiceException, e:
                         print "Service call failed: %s" % e
 
+                state_msg.model_name = model_name1#+str(box_i)
+                state_msg.pose.position.x = float(box_position[0])
+                state_msg.pose.position.y = float(box_position[1])
+                state_msg.pose.position.z = float(box_position[2])
+                state_msg.pose.orientation.x = 0
+                state_msg.pose.orientation.y = 0
+                state_msg.pose.orientation.z = 0
+                state_msg.pose.orientation.w = 0
+
+                try:
+                    resp = srv_set_state(state_msg)
+#                    if box_i == 2 :
+#                        box_i = 0
+
+                except rospy.ServiceException, e:
+                    print "Service call failed: %s" % e
 
         elif(msgs == "4") :
             ## Publish Start to Conveyor2
@@ -537,7 +538,7 @@ def on_message2(client, ud, msg) :
 #            pass
             # Spawn model
             bearing_i += 1
-            last_obj_detect = True
+#            last_obj_detect = True
 
             if bearing_i <= 5 and first_obj :
                 res_spawn = srv_spawn_model(model_name2+str(bearing_i), object_xml_string, "/", object_pose, "world")
@@ -575,7 +576,7 @@ def on_message2(client, ud, msg) :
 
             isConveyor2_on = False
             isCounter_finish = True
-            delete_flag = True
+#            delete_flag = True
 
 #            ret = client1.publish(convey1_client_topic, "start", qos=1)
 

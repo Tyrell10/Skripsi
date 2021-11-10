@@ -2,7 +2,7 @@
 #include <ESPmDNS.h>
 #include <PubSubClient.h>
 
-#define MAX_COUNT 3
+//#define MAX_COUNT 3
 
 WiFiClient client;
 PubSubClient mqtt(client);
@@ -122,7 +122,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
 }
 
 void setup() {
-//  Serial.begin(9600);
+  Serial.begin(9600);
 
   pinMode(sensor_ir1, INPUT);
   pinMode(sensor_ir2, INPUT);
@@ -178,16 +178,15 @@ void loop() {
     prevMillis_stop = currentMillis;
   }
 
-  start_obj = !digitalRead(sensor_ir1);
-  stop_obj = !digitalRead(sensor_ir2);
+  start_obj = !digitalRead(sensor_ir2);
+  stop_obj = !digitalRead(sensor_ir1);
 
-//  Serial.print("Ir 1: ");
-//  Serial.println(start_obj);
+  Serial.print("Ir 1: ");
+  Serial.println(start_obj);
 //  Serial.println(start_pub);
 
-//  Serial.print("Ir 2: ");
-//  Serial.println(stop_obj);
-//  Serial.println(device_name[8]);
+  Serial.print("Ir 2: ");
+  Serial.println(stop_obj);
 
   if(cmd_msg == "0"){
     switch(motor_status){

@@ -447,22 +447,6 @@ def on_message(client, ud, msg) :
                     print "Error: model %s not spawn. error message = "% model_name1 + res_spawn.status_message
             else :
                 state_msg = ModelState()
-                state_msg.model_name = model_name1#+str(box_i)
-                state_msg.pose.position.x = float(box_position[0])
-                state_msg.pose.position.y = float(box_position[1])
-                state_msg.pose.position.z = float(box_position[2])
-                state_msg.pose.orientation.x = 0
-                state_msg.pose.orientation.y = 0
-                state_msg.pose.orientation.z = 0
-                state_msg.pose.orientation.w = 0
-
-                try:
-                    resp = srv_set_state(state_msg)
-#                    if box_i == 2 :
-#                        box_i = 0
-
-                except rospy.ServiceException, e:
-                    print "Service call failed: %s" % e
 
                 for i in range(0, 3) :
                     bearing_list.append(bearing_list[i])
@@ -485,6 +469,22 @@ def on_message(client, ud, msg) :
                     except rospy.ServiceException, e:
                         print "Service call failed: %s" % e
 
+                state_msg.model_name = model_name1#+str(box_i)
+                state_msg.pose.position.x = float(box_position[0])
+                state_msg.pose.position.y = float(box_position[1])
+                state_msg.pose.position.z = float(box_position[2])
+                state_msg.pose.orientation.x = 0
+                state_msg.pose.orientation.y = 0
+                state_msg.pose.orientation.z = 0
+                state_msg.pose.orientation.w = 0
+
+                try:
+                    resp = srv_set_state(state_msg)
+#                    if box_i == 2 :
+#                        box_i = 0
+
+                except rospy.ServiceException, e:
+                    print "Service call failed: %s" % e
 
         elif(msgs == "4") :
             ## Publish Start to Conveyor2
