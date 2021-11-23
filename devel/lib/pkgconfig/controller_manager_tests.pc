@@ -1,0 +1,8 @@
+prefix=/home/tyrell/Skripsi/devel
+
+Name: controller_manager_tests
+Description: Description of controller_manager_tests
+Version: 0.13.5
+Cflags: -I/home/tyrell/Skripsi/src/ros_control/controller_manager_tests/include
+Libs: -L${prefix}/lib -lcontroller_manager_tests
+Requires: controller_manager controller_interface

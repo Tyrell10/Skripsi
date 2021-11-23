@@ -25,6 +25,7 @@ const char* MQTT_SERVER = "broker.emqx.io";
 //const char* MQTT_SERVER = "36.92.136.155";
 const char* TOPIC_CLIENT = "AppleConveyor/Conveyor2/Client/"; 
 const char* TOPIC_SERVER = "AppleConveyor/Conveyor2/Server/";
+const char* COUNTER_TOPIC_SERVER = "AppleConveyor/Counter/Server/";
 
 // Device Conf
 const char* device_name = "Conveyor2_client";
@@ -206,6 +207,7 @@ void loop() {
   if(start_obj && start_pub && motor_status){
     mqtt.publish(TOPIC_SERVER, "3");
     count += 1;
+    start_pub = false;  
 
     if((count >= MAX_COUNT) && stop_pub){
       mqtt.publish(TOPIC_SERVER, "4");
@@ -213,8 +215,11 @@ void loop() {
       stop_pub = false;
       count = 0;
     }
+    else{
+      mqtt.publish(COUNTER_TOPIC_SERVER, (String)count);
+    }
     
-    start_pub = false;  
+    
   }
 
   if(cmd_msg=="start"){

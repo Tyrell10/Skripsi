@@ -1,4 +1,4 @@
-prefix=/home/tyrell/conveyorBelt_ws/install
+prefix=/home/tyrell/Skripsi/install
 
 Name: smach_viewer
 Description: Description of smach_viewer

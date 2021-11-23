@@ -37,7 +37,7 @@ client2 = None
 client3 = None
 convey1_server_topic = "AppleConveyor/Conveyor1/Server/"
 convey2_server_topic = "AppleConveyor/Conveyor2/Server/"
-counter_server_topic = "AppleConveyor/Counter/"
+counter_server_topic = "AppleConveyor/Counter/Server/"
 convey1_client_topic = "AppleConveyor/Conveyor1/Client/"
 convey2_client_topic = "AppleConveyor/Conveyor2/Client/"
 
@@ -65,7 +65,7 @@ model_name2 = "bearing_model"
 model_type = "urdf"
 bearing_list = []
 object_position = (0.098, 0.327, 0.155)
-box_position = (-0.12, -0.012, 0.056)
+box_position = (-0.12, -0.01, 0.056)
 bearing_store = (-0.12, 0.327, 0.012)
 object_pose = Pose()
 box_pose = Pose()
@@ -85,6 +85,7 @@ object_xml_string = object_file_xml.read().replace('\n', '')
 box_xml_string = box_file_xml.read().replace('\n', '')
 
 delete_flag = True
+terminate = False
 
 class Setup(smach.State):
     def __init__(self):
@@ -105,7 +106,7 @@ class Setup(smach.State):
 
 class Stop(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['stop', 'start'])
+        smach.State.__init__(self, outcomes=['stop', 'start', 'terminate'])
 
     def execute(self, ud):
         global isStart, isStop, client1, client2
@@ -116,6 +117,9 @@ class Stop(smach.State):
         if(isStart):
             isStop = False
             return 'start'
+
+        elif(terminate):
+            return 'terminate'
 
         if not isConveyor1_on :
             convey1_cmd_msg.linear.x = 0.0
@@ -155,33 +159,32 @@ class Stop(smach.State):
         return 'stop'
 
 
-#class Apple_counter(smach.State):
-#    def __init__(self):
-#        smach.State.__init__(self, outcomes=['counter_finish', 'waiting_counting', 'stop'])
+class Apple_counter(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['counter_finish', 'waiting_counting', 'stop'], input_keys=['obj_counter_in'], output_keys=['obj_counter_out'])
 
-#    def execute(self, ud):
-#        global isCounter_finish, isConveyor2_on, stop_req, convey2_msgs_time, isStart
+    def execute(self, ud):
+        global isCounter_finish, isConveyor2_on, stop_req, convey2_msgs_time, isStart
 
-#        rospy.loginfo("[START COUNTING]")
-#        duration = rospy.get_rostime() - convey2_msgs_time
-#        rospy.loginfo(duration)
-#        rospy.sleep(0.1)
+        rospy.loginfo("[START COUNTING]")
+        rospy.sleep(0.05)
 
-#        if(duration.secs >= 60.0):
-#            isStart = False
-#            stop_req = True
-#            return 'stop'
+        if (isStop):
+            isStart = False
+            return 'stop'
 
-#        if(isCounter_finish):
-#            isConveyor2_on = False
-#            return 'counter_finish'
-#        else:
-#            return 'waiting_counting'
+        elif(isCounter_finish):
+            isConveyor2_on = False
+            return 'counter_finish'
+
+        else:
+            ud.obj_counter_out = apple_count
+            return 'waiting_counting'
 
 
 class Conveyor1(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['box_detect', 'running', 'stop'])
+        smach.State.__init__(self, outcomes=['box_detect', 'running', 'stop'], input_keys=['duration_in'], output_keys=['duration_out'])
 
     def execute(self, ud):
         global isBox_detect, isConveyor1_on, stop_req, convey1_msgs_time, isStart, isStop
@@ -192,6 +195,8 @@ class Conveyor1(smach.State):
         duration = rospy.get_rostime() - convey1_msgs_time
         rospy.loginfo(duration)
         rospy.sleep(0.1)
+
+        ud.duration_out = duration.secs
 
         if isStop :
             isStart = False
@@ -208,7 +213,21 @@ class Conveyor1(smach.State):
             convey1_cmd_pub.publish(convey1_cmd_msg)
             return 'box_detect'
 
-        elif isConveyor1_on:
+        elif(duration.secs >= 20.0 or not isConveyor1_on):
+
+            if duration.secs >= 60.0 :
+                isStop = True
+
+            convey1_cmd_msg.linear.x = 0.0
+            convey1_cmd_msg.linear.y = 0.0
+            convey1_cmd_msg.linear.z = 0.0
+            convey1_cmd_msg.angular.x = 0.0
+            convey1_cmd_msg.angular.y = 0.0
+            convey1_cmd_msg.angular.z = 0.0
+            convey1_cmd_pub.publish(convey1_cmd_msg)
+            return 'running'
+
+        else:
             # publish /convey1_cmd_vel -> x
             # publish /plannar_node/box_cmd_vel -> x
 
@@ -284,25 +303,11 @@ class Conveyor1(smach.State):
 
             return 'running'
 
-        elif(duration.secs >= 10.0 or not isConveyor1_on):
-
-            if duration.secs >= 60.0 :
-                isStop = True
-
-            convey1_cmd_msg.linear.x = 0.0
-            convey1_cmd_msg.linear.y = 0.0
-            convey1_cmd_msg.linear.z = 0.0
-            convey1_cmd_msg.angular.x = 0.0
-            convey1_cmd_msg.angular.y = 0.0
-            convey1_cmd_msg.angular.z = 0.0
-            convey1_cmd_pub.publish(convey1_cmd_msg)
-            return 'running'
-
 
 
 class Conveyor2(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['counter_finish', 'running', 'stop'])
+        smach.State.__init__(self, outcomes=['counter_finish', 'running', 'stop'], input_keys=['duration_in'], output_keys=['duration_out'])
 
     def execute(self, ud):
         global isConveyor2_on, isCounter_finish, stop_req, convey2_msgs_time, isStart, isStop
@@ -311,7 +316,9 @@ class Conveyor2(smach.State):
         rospy.loginfo("[EXECUTING CONVEYOR 2]")
         duration = rospy.get_rostime() - convey2_msgs_time
         rospy.loginfo(duration)
-        rospy.sleep(0.1)
+        rospy.sleep(0.05)
+
+        ud.duration_out = duration.secs
 
         if isStop :
             isStart = False
@@ -329,7 +336,21 @@ class Conveyor2(smach.State):
 
             return 'counter_finish'
 
-        elif isConveyor2_on:
+        elif(duration.secs >= 20.0 or not isConveyor2_on):
+
+            if duration.secs >= 60.0 :
+                isStop = True
+
+            convey2_cmd_msg.linear.x = 0.0
+            convey2_cmd_msg.linear.y = 0.0
+            convey2_cmd_msg.linear.z = 0.0
+            convey2_cmd_msg.angular.x = 0.0
+            convey2_cmd_msg.angular.y = 0.0
+            convey2_cmd_msg.angular.z = 0.0
+            convey2_cmd_pub.publish(convey2_cmd_msg)
+            return 'running'
+
+        else:
             # publish /convey2_cmd_vel -> x
             # publish /plannar_node/object_cmd_vel -> x
 
@@ -351,24 +372,10 @@ class Conveyor2(smach.State):
 
             return 'running'
 
-        if(duration.secs >= 10.0 or not isConveyor2_on):
-
-            if duration.secs >= 60.0 :
-                isStop = True
-
-            convey2_cmd_msg.linear.x = 0.0
-            convey2_cmd_msg.linear.y = 0.0
-            convey2_cmd_msg.linear.z = 0.0
-            convey2_cmd_msg.angular.x = 0.0
-            convey2_cmd_msg.angular.y = 0.0
-            convey2_cmd_msg.angular.z = 0.0
-            convey2_cmd_pub.publish(convey2_cmd_msg)
-            return 'running'
-
 
 class Ready(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['conveyor1_start', 'conveyor2_start', 'stop', 'waiting_next_input'])
+        smach.State.__init__(self, outcomes=['conveyor1_start', 'conveyor2_start', 'stop', 'waiting_next_input', 'terminate'])
 
     def execute(self, ud):
         global isConveyor1_on, isConveyor2_on, isCounter_finish, isBox_detect
@@ -387,6 +394,9 @@ class Ready(smach.State):
         elif(isConveyor2_on):
             isCounter_finish = False
             return 'conveyor2_start'
+
+        elif(terminate):
+            return 'terminate'
 
         else:
             return 'waiting_next_input'
@@ -578,28 +588,22 @@ def on_message2(client, ud, msg) :
             isCounter_finish = True
 #            delete_flag = True
 
-#            ret = client1.publish(convey1_client_topic, "start", qos=1)
 
-#            if ret != 0 :
-#                rospy.loginfo("[MQTT PUBLISHED STOP: SUCCESS]")
-#            else :
-#                rospy.loginfo("[MQTT PUBLISHED STOP: FAILED]")
+def on_message3(client, ud, msg) :
+    global apple_count, isCounter_finish, convey2_msgs_time
 
+    msgs = str(msg.payload.decode("utf-8"))
 
-#def on_message3(client, ud, msg) :
-#    global apple_count, isCounter_finish, convey2_msgs_time
+    print("message received " ,msgs)
+    print("message topic=",msg.topic)
+    print("message qos=",msg.qos)
+    print("message retain flag=",msg.retain)
 
-#    msgs = str(msg.payload.decode("utf-8"))
+    if(msg.topic==counter_server_topic) :
+        convey2_msgs_time = rospy.get_rostime()
 
-#    print("message received " ,msgs)
-#    print("message topic=",msg.topic)
-#    print("message qos=",msg.qos)
-#    print("message retain flag=",msg.retain)
-
-#    if(msg.topic==counter_server_topic) :
-#        convey2_msgs_time = rospy.get_rostime()
-
-#        apple_count = int(msgs)
+        apple_count = int(msgs)
+        rospy.loginfo("counting object :%s", msgs)
 #        if apple_count == 10 :
 #            apple_count = 0
 #            isCounter_finish = True
@@ -617,6 +621,9 @@ def subscribing_convey2() :
 
     client2.on_message = on_message2
     client2.loop_start()
+
+    client3.on_message = on_message3
+    client3.loop_start()
 
 
 #def subscribing_convey3() :
@@ -642,9 +649,9 @@ def main():
     client2.connect(broker_address, 1883)
     client2.subscribe(convey2_server_topic)
 
-#    client3 = mqtt.Client("Counter_Monitor")
-#    client3.connect(broker_address, 1883)
-#    client3.subscribe(counter_server_topic)
+    client3 = mqtt.Client("Counter_Monitor")
+    client3.connect(broker_address, 1883)
+    client3.subscribe(counter_server_topic)
 
     sub1 = threading.Thread(target=subscribing_convey1)
     sub2 = threading.Thread(target=subscribing_convey2)
@@ -692,50 +699,60 @@ def main():
                                              'waiting':'SETUP'})
 
         sm_1 = smach.StateMachine(outcomes=['APPLE_CONVEYOR_DONE'])
+        sm_1.userdata.delay_convey1 = 0
+
         with sm_1:
             smach.StateMachine.add('CONVEYOR1', Conveyor1(),
                                     transitions={'box_detect':'READY',
                                                  'running':'CONVEYOR1',
-                                                 'stop':'STOP'})
+                                                 'stop':'STOP'},
+                                    remapping={'duration_in':'delay_convey1',
+                                               'duration_out':'delay_convey1'})
 
-            smach.StateMachine.add('CONVEYOR2', Conveyor2(),
-                                    transitions={'counter_finish':'READY',
-                                                 'running':'CONVEYOR2',
-                                                 'stop':'STOP'})
+#            smach.StateMachine.add('CONVEYOR2', Conveyor2(),
+#                                    transitions={'counter_finish':'READY',
+#                                                 'running':'CONVEYOR2',
+#                                                 'stop':'STOP'})
 
             smach.StateMachine.add('READY', Ready(),
                                     transitions={'conveyor1_start':'CONVEYOR1',
-                                                 'conveyor2_start':'CONVEYOR2',
+                                                 'conveyor2_start':'SM_CON',
                                                  'stop':'STOP',
+                                                 'terminate':'APPLE_CONVEYOR_DONE',
                                                  'waiting_next_input':'READY'})
 
             smach.StateMachine.add('STOP', Stop(),
                                     transitions={'start':'READY',
-                                                 'stop':'STOP'})          
+                                                 'stop':'STOP',
+                                                 'terminate':'APPLE_CONVEYOR_DONE'})
 
-#            sm_concurrence = smach.Concurrence(outcomes=['CONCURRENCE_DONE', 'WAITING_CON', 'STOP_CON'],
-#                                               default_outcome='WAITING_CON',
-#                                               outcome_map={'CONCURRENCE_DONE':
-#                                                            {'APPLE_COUNTER':'counter_finish',
-#                                                             'CONVEYOR2':'counter_finish'},
-#                                                            'WAITING_CON':
-#                                                            {'APPLE_COUNTER':'waiting_counting',
-#                                                             'CONVEYOR2':'running'},
-#                                                            'STOP_CON':
-#                                                            {'CONVEYOR2':'stop',
-#                                                             'APPLE_COUNTER':'stop'}})
+            sm_concurrence = smach.Concurrence(outcomes=['CONCURRENCE_DONE', 'WAITING_CON', 'STOP_CON'],
+                                               default_outcome='WAITING_CON',
+                                               outcome_map={'CONCURRENCE_DONE':
+                                                            {'APPLE_COUNTER':'counter_finish',
+                                                             'CONVEYOR2':'counter_finish'},
+                                                            'WAITING_CON':
+                                                            {'APPLE_COUNTER':'waiting_counting',
+                                                             'CONVEYOR2':'running'},
+                                                            'STOP_CON':
+                                                            {'CONVEYOR2':'stop',
+                                                             'APPLE_COUNTER':'stop'}})
 
-#            with sm_concurrence:
-#                smach.Concurrence.add('CONVEYOR2', Conveyor2())
-#                smach.Concurrence.add('APPLE_COUNTER', Apple_counter())
+            sm_concurrence.userdata.bearing_counter = 0
+            sm_concurrence.userdata.delay_convey2 = 0
+            with sm_concurrence:
+                smach.Concurrence.add('CONVEYOR2', Conveyor2(), remapping={'duration_in':'delay_convey2',
+                                                                           'duration_out':'delay_convey2'})
+                smach.Concurrence.add('APPLE_COUNTER', Apple_counter(), remapping={'obj_counter_in':'bearing_counter',
+                                                                                   'obj_counter_out':'bearing_counter'})
 
-#            smach.StateMachine.add('SM_CON', sm_concurrence,
-#                                    transitions={'CONCURRENCE_DONE':'READY',
-#                                                 'WAITING_CON':'SM_CON',
-#                                                 'STOP_CON':'STOP'})
+            smach.StateMachine.add('SM_CON', sm_concurrence,
+                                    transitions={'CONCURRENCE_DONE':'READY',
+                                                 'WAITING_CON':'SM_CON',
+                                                 'STOP_CON':'STOP'})
 
         smach.StateMachine.add('APPLE_CONVEYOR', sm_1,
-                                transitions={'APPLE_CONVEYOR_DONE':'SETUP'})
+                                transitions={'APPLE_CONVEYOR_DONE':'SM_DONE'})
 
     viewer = smach_ros.IntrospectionServer('smach_viewer', sm, '/APPLE_CONVEYOR_MONITOR')
     viewer.start()
@@ -746,7 +763,7 @@ def main():
     viewer.stop()
     client1.loop_stop()
     client2.loop_stop()
-#    client3.loop_stop()
+    client3.loop_stop()
     sub1.stop()
     sub2.stop()
 #    sub3.stop()
@@ -756,4 +773,4 @@ if __name__ == '__main__':
     try:
         main()
     except rospy.ROSInterruptException:
-        pass
+        terminate = True

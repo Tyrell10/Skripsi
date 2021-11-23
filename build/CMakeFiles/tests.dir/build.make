@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tyrell/conveyorBelt_ws/src
+CMAKE_SOURCE_DIR = /home/tyrell/Skripsi/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tyrell/conveyorBelt_ws/build
+CMAKE_BINARY_DIR = /home/tyrell/Skripsi/build
 
 # Utility rule file for tests.
 
@@ -67,6 +67,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/tyrell/conveyorBelt_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/conveyorBelt_ws/src /home/tyrell/conveyorBelt_ws/src /home/tyrell/conveyorBelt_ws/build /home/tyrell/conveyorBelt_ws/build /home/tyrell/conveyorBelt_ws/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/tyrell/Skripsi/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/Skripsi/src /home/tyrell/Skripsi/src /home/tyrell/Skripsi/build /home/tyrell/Skripsi/build /home/tyrell/Skripsi/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

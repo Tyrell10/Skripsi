@@ -24,7 +24,7 @@
 	<ode>
 	    <solver>
 	        <type>quick</type>
-		<iters>40</iters>
+		<iters>44</iters>
 	    </solver>
 	</ode>
     </physics>
