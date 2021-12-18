@@ -44,8 +44,8 @@ unsigned long mqttMillis = 0;
 unsigned long start_time = 0;
 unsigned long timer_convey = 0;
 const int interval_pub = 1000;
-const int interval_start = 2000;
-const int interval_stop = 2000;
+const int interval_start = 1000;
+const int interval_stop = 7000;
 
 // msgs Callback
 /*  1 : Start
@@ -57,9 +57,9 @@ String cmd_msg = "";
 int count = 0;
 
 void connectToWiFi(){
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+//  Serial.println();
+//  Serial.print("Connecting to ");
+//  Serial.println(ssid);
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -70,7 +70,7 @@ void connectToWiFi(){
     if(wifi_timeout >= 10) ESP.restart();
     else wifi_timeout++;
 
-    Serial.print(".");
+//    Serial.print(".");
  
     WiFi.disconnect();
     WiFi.reconnect();
@@ -86,27 +86,27 @@ void connectToWiFi(){
   }
 
 //  Serial.print("...");
-  Serial.println(" connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+//  Serial.println(" connected");
+//  Serial.print("IP address: ");
+//  Serial.println(WiFi.localIP());
 }
 
 void reconnectMQTT() {
-    Serial.println("Attempting MQTT connection...");
-    Serial.print("Subsricbing to :");
-    Serial.println(TOPIC_CLIENT);
+//    Serial.println("Attempting MQTT connection...");
+//    Serial.print("Subsricbing to :");
+//    Serial.println(TOPIC_CLIENT);
     
     if(mqtt.connect(device_name, HOSTNAME, "")) 
     {
-        Serial.print(device_name);
-        Serial.println(" connected");
+//        Serial.print(device_name);
+//        Serial.println(" connected");
         mqtt.subscribe(TOPIC_CLIENT, 1);
     }
     else
     {
-        Serial.print("failed, rc=");
-        Serial.print(mqtt.state());
-        Serial.println(" try again in 1 seconds");
+//        Serial.print("failed, rc=");
+//        Serial.print(mqtt.state());
+//        Serial.println(" try again in 1 seconds");
         mqtt.unsubscribe(TOPIC_CLIENT);
     }
 }
@@ -126,7 +126,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
 }
 
 void setup() {
-  Serial.begin(115200);
+//  Serial.begin(115200);
 
   pinMode(sensor_ir1, INPUT);
   pinMode(sensor_ir2, INPUT);
@@ -145,7 +145,7 @@ void loop() {
   if(!mqtt.connected()){
       // Reconnect WiFi Connection
       if(WiFi.status() != WL_CONNECTED){
-        Serial.println("Connection Lost! Reconnecting...");
+//        Serial.println("Connection Lost! Reconnecting...");
         connectToWiFi();  
       }
       else reconnectMQTT();  
@@ -220,9 +220,9 @@ void loop() {
       stop_pub = false;
       count = 0;
     }
-    else{
-      mqtt.publish(COUNTER_TOPIC_SERVER, (char*)count);
-    }
+//    else{
+//      mqtt.publish(COUNTER_TOPIC_SERVER, (char*)count);
+//    }
   }
 //  else if((stop_obj && stop_pub && motor_status) || (stop_obj && start_flag)){
 //    motor_status = 0;
