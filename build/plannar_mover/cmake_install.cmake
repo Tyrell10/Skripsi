@@ -1,8 +1,8 @@
-# Install script for directory: /home/tyrell/Skripsi/src/plannar_mover
+# Install script for directory: /home/tyrell/conveyorBelt_ws/src/plannar_mover
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/tyrell/Skripsi/install")
+  set(CMAKE_INSTALL_PREFIX "/home/tyrell/conveyorBelt_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/Skripsi/build/plannar_mover/catkin_generated/installspace/plannar_mover.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/build/plannar_mover/catkin_generated/installspace/plannar_mover.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/plannar_mover/cmake" TYPE FILE FILES
-    "/home/tyrell/Skripsi/build/plannar_mover/catkin_generated/installspace/plannar_moverConfig.cmake"
-    "/home/tyrell/Skripsi/build/plannar_mover/catkin_generated/installspace/plannar_moverConfig-version.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/plannar_mover/catkin_generated/installspace/plannar_moverConfig.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/plannar_mover/catkin_generated/installspace/plannar_moverConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/plannar_mover" TYPE FILE FILES "/home/tyrell/Skripsi/src/plannar_mover/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/plannar_mover" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/src/plannar_mover/package.xml")
 endif()
 

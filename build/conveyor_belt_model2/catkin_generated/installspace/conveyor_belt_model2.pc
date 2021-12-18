@@ -1,4 +1,4 @@
-prefix=/home/tyrell/Skripsi/install
+prefix=/home/tyrell/conveyorBelt_ws/install
 
 Name: conveyor_belt_model2
 Description: Description of conveyor_belt_model2

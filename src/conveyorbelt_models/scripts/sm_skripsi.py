@@ -84,8 +84,13 @@ box_file_xml = open(box_file_location)
 object_xml_string = object_file_xml.read().replace('\n', '')
 box_xml_string = box_file_xml.read().replace('\n', '')
 
+start_flag = False
 delete_flag = True
 terminate = False
+sim_timer = 0
+sim_duration = 0
+count_start = 0
+packaging_sys_timer = 0  # in ms
 
 class Setup(smach.State):
     def __init__(self):
@@ -213,7 +218,7 @@ class Conveyor1(smach.State):
             convey1_cmd_pub.publish(convey1_cmd_msg)
             return 'box_detect'
 
-        elif(duration.secs >= 20.0 or not isConveyor1_on):
+        elif(duration.secs >= 30.0 or not isConveyor1_on):
 
             if duration.secs >= 60.0 :
                 isStop = True
@@ -285,7 +290,7 @@ class Conveyor1(smach.State):
 
 #                    delete_flag = False
 
-            convey1_cmd_msg.linear.x = 0.2
+            convey1_cmd_msg.linear.x = 0.065
             convey1_cmd_msg.linear.y = 0.0
             convey1_cmd_msg.linear.z = 0.0
             convey1_cmd_msg.angular.x = 0.0
@@ -293,7 +298,7 @@ class Conveyor1(smach.State):
             convey1_cmd_msg.angular.z = 0.0
             convey1_cmd_pub.publish(convey1_cmd_msg)
 
-            box_cmd_msg.linear.x = 0.2
+            box_cmd_msg.linear.x = 0.065
             box_cmd_msg.linear.y = 0.0
             box_cmd_msg.linear.z = 0.0
             box_cmd_msg.angular.x = 0.0
@@ -336,7 +341,7 @@ class Conveyor2(smach.State):
 
             return 'counter_finish'
 
-        elif(duration.secs >= 20.0 or not isConveyor2_on):
+        elif(duration.secs >= 30.0 or not isConveyor2_on):
 
             if duration.secs >= 60.0 :
                 isStop = True
@@ -354,7 +359,7 @@ class Conveyor2(smach.State):
             # publish /convey2_cmd_vel -> x
             # publish /plannar_node/object_cmd_vel -> x
 
-            convey2_cmd_msg.linear.x = 0.2
+            convey2_cmd_msg.linear.x = 0.077
             convey2_cmd_msg.linear.y = 0.0
             convey2_cmd_msg.linear.z = 0.0
             convey2_cmd_msg.angular.x = 0.0
@@ -363,7 +368,7 @@ class Conveyor2(smach.State):
             convey2_cmd_pub.publish(convey2_cmd_msg)
 
             object_cmd_msg.linear.x = 0.0
-            object_cmd_msg.linear.y = -0.5
+            object_cmd_msg.linear.y = -0.077
             object_cmd_msg.linear.z = 0.0
             object_cmd_msg.angular.x = 0.0
             object_cmd_msg.angular.y = 0.0
@@ -375,13 +380,17 @@ class Conveyor2(smach.State):
 
 class Ready(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['conveyor1_start', 'conveyor2_start', 'stop', 'waiting_next_input', 'terminate'])
+        smach.State.__init__(self, outcomes=['conveyor1_start', 'conveyor2_start', 'stop', 'waiting_next_input', 'terminate'], input_keys=['sim_in', 'packaging_sys_in'], output_keys=['sim_out', 'packaging_sys_out'])
 
     def execute(self, ud):
         global isConveyor1_on, isConveyor2_on, isCounter_finish, isBox_detect
+        global sim_duration, packaging_sys_timer
 
         rospy.loginfo("[WAITING FOR TRANSITION]")
         rospy.sleep(0.1)
+
+        ud.sim_out = sim_duration.secs
+        ud.packaging_sys_out = packaging_sys_timer/1000.0
 
         if(isStop):
             isStart = False
@@ -405,7 +414,7 @@ class Ready(smach.State):
 def on_message(client, ud, msg) :
     global isBox_detect, isStart, isStop, isConveyor1_on, isConveyor2_on, isCounter_finish, box_i, delete_box_time
     global convey1_msgs_time, convey2_msgs_time, apple_count, srv_spawn_model, srv_delete_model, bearing_list, first_box
-    global srv_set_state
+    global srv_set_state, start_flag, sim_timer, sim_duration, count_start, packaging_sys_timer
 
     """
     1 : Conveyor On
@@ -433,10 +442,17 @@ def on_message(client, ud, msg) :
 
         elif(msgs == "1") :
             isConveyor1_on = True
-            delete_box_time = rospy.get_rostime()
+            if(not start_flag) :
+                start_flag = True
+                count_start += 1
+                if(count_start%2==1) :
+                    sim_timer = rospy.get_rostime()
 
         elif(msgs == "2") :
             isConveyor1_on = False
+            if((count_start&2==0) and start_flag) :
+                start_flag = False
+                sim_duration = rospy.get_rostime() - sim_timer
 
         elif(msgs == "3") :
 #            pass
@@ -508,6 +524,8 @@ def on_message(client, ud, msg) :
 #                rospy.loginfo("[MQTT PUBLISHED STOP: SUCCESS]")
 #            else :
 #                rospy.loginfo("[MQTT PUBLISHED STOP: FAILED]")
+        else :
+            packaging_sys_timer = int(msgs)
 
 
 def on_message2(client, ud, msg) :
@@ -700,6 +718,8 @@ def main():
 
         sm_1 = smach.StateMachine(outcomes=['APPLE_CONVEYOR_DONE'])
         sm_1.userdata.delay_convey1 = 0
+        sm_1.userdata.sim_timer = 0
+        sm_1.userdata.packaging_sys_timer = 0.0
 
         with sm_1:
             smach.StateMachine.add('CONVEYOR1', Conveyor1(),
@@ -719,7 +739,11 @@ def main():
                                                  'conveyor2_start':'SM_CON',
                                                  'stop':'STOP',
                                                  'terminate':'APPLE_CONVEYOR_DONE',
-                                                 'waiting_next_input':'READY'})
+                                                 'waiting_next_input':'READY'},
+                                    remapping={'sim_in':'sim_timer',
+                                               'packaging_sys_in':'packaging_sys_timer',
+                                               'sim_out':'sim_timer',
+                                               'packaging_sys_out':'packaging_sys_timer'})
 
             smach.StateMachine.add('STOP', Stop(),
                                     transitions={'start':'READY',

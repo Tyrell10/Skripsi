@@ -1,4 +1,4 @@
-prefix=/home/tyrell/Skripsi/install
+prefix=/home/tyrell/conveyorBelt_ws/install
 
 Name: plannar_mover
 Description: Description of plannar_mover

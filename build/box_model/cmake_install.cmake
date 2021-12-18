@@ -1,8 +1,8 @@
-# Install script for directory: /home/tyrell/Skripsi/src/box_model
+# Install script for directory: /home/tyrell/conveyorBelt_ws/src/box_model
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/tyrell/Skripsi/install")
+  set(CMAKE_INSTALL_PREFIX "/home/tyrell/conveyorBelt_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,33 +33,33 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/Skripsi/build/box_model/catkin_generated/installspace/box_model.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/build/box_model/catkin_generated/installspace/box_model.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/cmake" TYPE FILE FILES
-    "/home/tyrell/Skripsi/build/box_model/catkin_generated/installspace/box_modelConfig.cmake"
-    "/home/tyrell/Skripsi/build/box_model/catkin_generated/installspace/box_modelConfig-version.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/box_model/catkin_generated/installspace/box_modelConfig.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/box_model/catkin_generated/installspace/box_modelConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model" TYPE FILE FILES "/home/tyrell/Skripsi/src/box_model/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/src/box_model/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/config" TYPE DIRECTORY FILES "/home/tyrell/Skripsi/src/box_model/config/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/config" TYPE DIRECTORY FILES "/home/tyrell/conveyorBelt_ws/src/box_model/config/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/launch" TYPE DIRECTORY FILES "/home/tyrell/Skripsi/src/box_model/launch/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/launch" TYPE DIRECTORY FILES "/home/tyrell/conveyorBelt_ws/src/box_model/launch/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/meshes" TYPE DIRECTORY FILES "/home/tyrell/Skripsi/src/box_model/meshes/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/meshes" TYPE DIRECTORY FILES "/home/tyrell/conveyorBelt_ws/src/box_model/meshes/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/urdf" TYPE DIRECTORY FILES "/home/tyrell/Skripsi/src/box_model/urdf/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/box_model/urdf" TYPE DIRECTORY FILES "/home/tyrell/conveyorBelt_ws/src/box_model/urdf/")
 endif()
 

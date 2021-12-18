@@ -1,4 +1,4 @@
-prefix=/home/tyrell/Skripsi/devel
+prefix=/home/tyrell/conveyorBelt_ws/devel
 
 Name: box_model
 Description: Description of box_model

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tyrell/Skripsi/src
+CMAKE_SOURCE_DIR = /home/tyrell/conveyorBelt_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tyrell/Skripsi/build
+CMAKE_BINARY_DIR = /home/tyrell/conveyorBelt_ws/build
 
 # Utility rule file for conveyorbelt_models_generate_messages.
 
@@ -63,10 +63,10 @@ conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/build: 
 .PHONY : conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/build
 
 conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/clean:
-	cd /home/tyrell/Skripsi/build/conveyorbelt_models && $(CMAKE_COMMAND) -P CMakeFiles/conveyorbelt_models_generate_messages.dir/cmake_clean.cmake
+	cd /home/tyrell/conveyorBelt_ws/build/conveyorbelt_models && $(CMAKE_COMMAND) -P CMakeFiles/conveyorbelt_models_generate_messages.dir/cmake_clean.cmake
 .PHONY : conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/clean
 
 conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/depend:
-	cd /home/tyrell/Skripsi/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/Skripsi/src /home/tyrell/Skripsi/src/conveyorbelt_models /home/tyrell/Skripsi/build /home/tyrell/Skripsi/build/conveyorbelt_models /home/tyrell/Skripsi/build/conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/tyrell/conveyorBelt_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/conveyorBelt_ws/src /home/tyrell/conveyorBelt_ws/src/conveyorbelt_models /home/tyrell/conveyorBelt_ws/build /home/tyrell/conveyorBelt_ws/build/conveyorbelt_models /home/tyrell/conveyorBelt_ws/build/conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : conveyorbelt_models/CMakeFiles/conveyorbelt_models_generate_messages.dir/depend
 

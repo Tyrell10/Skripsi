@@ -1,8 +1,8 @@
-# Install script for directory: /home/tyrell/Skripsi/src/smach_viewer
+# Install script for directory: /home/tyrell/conveyorBelt_ws/src/smach_viewer
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/tyrell/Skripsi/install")
+  set(CMAKE_INSTALL_PREFIX "/home/tyrell/conveyorBelt_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,25 +33,25 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  include("/home/tyrell/Skripsi/build/smach_viewer/catkin_generated/safe_execute_install.cmake")
+  include("/home/tyrell/conveyorBelt_ws/build/smach_viewer/catkin_generated/safe_execute_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/Skripsi/build/smach_viewer/catkin_generated/installspace/smach_viewer.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/build/smach_viewer/catkin_generated/installspace/smach_viewer.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/smach_viewer/cmake" TYPE FILE FILES
-    "/home/tyrell/Skripsi/build/smach_viewer/catkin_generated/installspace/smach_viewerConfig.cmake"
-    "/home/tyrell/Skripsi/build/smach_viewer/catkin_generated/installspace/smach_viewerConfig-version.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/smach_viewer/catkin_generated/installspace/smach_viewerConfig.cmake"
+    "/home/tyrell/conveyorBelt_ws/build/smach_viewer/catkin_generated/installspace/smach_viewerConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/smach_viewer" TYPE FILE FILES "/home/tyrell/Skripsi/src/smach_viewer/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/smach_viewer" TYPE FILE FILES "/home/tyrell/conveyorBelt_ws/src/smach_viewer/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/smach_viewer" TYPE PROGRAM FILES "/home/tyrell/Skripsi/src/smach_viewer/scripts/smach_viewer.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/smach_viewer" TYPE PROGRAM FILES "/home/tyrell/conveyorBelt_ws/src/smach_viewer/scripts/smach_viewer.py")
 endif()
 

@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "smach_ros;smach_msgs".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "smach_viewer"
-PROJECT_SPACE_DIR = "/home/tyrell/Skripsi/install"
+PROJECT_SPACE_DIR = "/home/tyrell/conveyorBelt_ws/install"
 PROJECT_VERSION = "2.0.2"

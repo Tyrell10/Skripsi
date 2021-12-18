@@ -7,4 +7,5 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/tyrell/Skripsi/build'
+export GAZEBO_MODEL_PATH="/home/tyrell/SmachROS/install/share/osrf_gear/models:$GAZEBO_MODEL_PATH"
+export PWD='/home/tyrell/conveyorBelt_ws/build'

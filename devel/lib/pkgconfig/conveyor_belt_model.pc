@@ -1,4 +1,4 @@
-prefix=/home/tyrell/Skripsi/devel
+prefix=/home/tyrell/conveyorBelt_ws/devel
 
 Name: conveyor_belt_model
 Description: Description of conveyor_belt_model

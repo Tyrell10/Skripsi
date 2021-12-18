@@ -18,6 +18,8 @@ bool stop_obj = false;
 bool start_pub = true;
 bool stop_pub = true;
 bool start_again = false;
+bool start_flag = false;
+bool timer_stop = false;
 unsigned int motor_status = 0;
 
 // MQTT Conf
@@ -39,9 +41,11 @@ unsigned int wifi_timeout = 0;
 unsigned long prevMillis_start = 0;
 unsigned long prevMillis_stop = 0;
 unsigned long mqttMillis = 0;
+unsigned long start_time = 0;
+unsigned long timer_convey = 0;
 const int interval_pub = 1000;
-const int interval_start = 4000;
-const int interval_stop = 4000;
+const int interval_start = 2000;
+const int interval_stop = 2000;
 
 // msgs Callback
 /*  1 : Start
@@ -53,9 +57,9 @@ String cmd_msg = "";
 ///int count = 0;
 
 void connectToWiFi(){
-//  Serial.println();
-//  Serial.print("Connecting to ");
-//  Serial.println(ssid);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -94,7 +98,7 @@ void reconnectMQTT() {
     
     if(mqtt.connect(device_name, HOSTNAME, "")) 
     {
-//        Serial.print(deviceName);
+//        Serial.print(device_name);
 //        Serial.println(" connected");
         mqtt.subscribe(TOPIC_CLIENT, 1);
     }
@@ -102,7 +106,7 @@ void reconnectMQTT() {
     {
 //        Serial.print("failed, rc=");
 //        Serial.print(mqtt.state());
-        //Serial.println(" try again in 1 seconds");
+//        Serial.println(" try again in 1 seconds");
         mqtt.unsubscribe(TOPIC_CLIENT);
     }
 }
@@ -122,7 +126,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
 }
 
 void setup() {
-  Serial.begin(9600);
+//  Serial.begin(115200);
 
   pinMode(sensor_ir1, INPUT);
   pinMode(sensor_ir2, INPUT);
@@ -172,6 +176,15 @@ void loop() {
     if(stopMillis - prevMillis_stop >= interval_stop){
       stop_pub = true;  
       start_again = false;
+      timer_stop = true;
+    }
+  }
+  else if(timer_stop){
+    unsigned long stopMillis = millis();
+
+    if(stopMillis - prevMillis_stop >= interval_stop){
+      motor_status = 0;
+      timer_stop = false;
     }
   }
   else{
@@ -181,12 +194,12 @@ void loop() {
   start_obj = !digitalRead(sensor_ir2);
   stop_obj = !digitalRead(sensor_ir1);
 
-  Serial.print("Ir 1: ");
-  Serial.println(start_obj);
+//  Serial.print("Ir 1: ");
+//  Serial.println(start_obj);
 //  Serial.println(start_pub);
 
-  Serial.print("Ir 2: ");
-  Serial.println(stop_obj);
+//  Serial.print("Ir 2: ");
+//  Serial.println(stop_obj);
 
   if(cmd_msg == "0"){
     switch(motor_status){
@@ -201,11 +214,6 @@ void loop() {
         break;
       }
     }
-  }
-  
-  if(start_obj && start_pub && motor_status){
-    mqtt.publish(TOPIC_SERVER, "3");
-    start_pub = false;  
   }
 
   if(cmd_msg=="start"){
@@ -223,14 +231,22 @@ void loop() {
   else if(cmd_msg=="stop"){
     mqtt.publish(TOPIC_SERVER, "2");
     motor_status = 0;
+    start_flag = false;
     cmd_msg = "";
   }
 
-  if(stop_obj && stop_pub && motor_status){
+  if(start_obj && start_pub && motor_status){
+    mqtt.publish(TOPIC_SERVER, "3");
+    start_pub = false;  
+    start_flag = true;
+  }
+  else if((stop_obj && stop_pub && motor_status) || (stop_obj && start_flag)){
     mqtt.publish(TOPIC_SERVER, "4");
     mqtt.publish("AppleConveyor/Conveyor2/Client/", "start");
+    
     motor_status = 0;
     stop_pub = false;
+    start_flag = false;
   }
 
   if(currentMillis - mqttMillis >= interval_pub)
@@ -241,10 +257,20 @@ void loop() {
     else{
       mqtt.publish(TOPIC_SERVER, "2");
     }
-
     mqttMillis = currentMillis;
+//    mqtt.publish(TOPIC_SERVER, (char*)timer_convey);
   }
 
-  digitalWrite(motor_pin_ccw, motor_status);  
+//  if(start_flag)
+//  {
+//    if(currentMillis - start_time >= 100)
+//    {
+//      timer_convey+=100;
+//      start_time = currentMillis;
+//      Serial.print(timer_convey);
+//      Serial.println(" ms");
+//    }
+//  }
   
+  digitalWrite(motor_pin_ccw, motor_status);  
 }
