@@ -124,7 +124,7 @@
       xyz="0 1 0" />
     <limit
       effort="100"
-      velocity="1.625" />
+      velocity="1.8" />
     <joint_properties damping="0.0"/>
   </joint>
   <link
@@ -195,7 +195,7 @@
       xyz="0 1 0" />
     <limit
       effort="100"
-      velocity="1.625" />
+      velocity="1.8" />
     <joint_properties damping="0.0"/>
   </joint>
   <link
@@ -266,7 +266,7 @@
       xyz="0 0 0" />
     <limit
       effort="100"
-      velocity="1.625" />
+      velocity="1.8" />
     <joint_properties damping="0.0"/>
   </joint>
 
@@ -274,7 +274,7 @@
   <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
 
     <!-- Plugin update rate in Hz -->
-    <updateRate>10</updateRate>
+    <updateRate>5</updateRate>
 
     <!-- Name of left joint, defaults to `left_joint` -->
     <leftJoint>another_joint</leftJoint>

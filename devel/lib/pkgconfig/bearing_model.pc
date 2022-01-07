@@ -1,4 +1,4 @@
-prefix=/home/tyrell/conveyorBelt_ws/devel
+prefix=/home/tyrell/Skripsi/devel
 
 Name: bearing_model
 Description: Description of bearing_model

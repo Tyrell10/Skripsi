@@ -1,4 +1,4 @@
-prefix=/home/tyrell/conveyorBelt_ws/install
+prefix=/home/tyrell/Skripsi/install
 
 Name: box_model
 Description: Description of box_model

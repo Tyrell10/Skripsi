@@ -276,7 +276,7 @@
   <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
 
     <!-- Plugin update rate in Hz -->
-    <updateRate>10</updateRate>
+    <updateRate>5</updateRate>
 
     <!-- Name of left joint, defaults to `left_joint` -->
     <leftJoint>convey2_another_joint</leftJoint>

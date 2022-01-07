@@ -67,14 +67,14 @@ set(bearing_model_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(bearing_model_SOURCE_PREFIX /home/tyrell/conveyorBelt_ws/src/bearing_model)
-  set(bearing_model_DEVEL_PREFIX /home/tyrell/conveyorBelt_ws/devel)
+  set(bearing_model_SOURCE_PREFIX /home/tyrell/Skripsi/src/bearing_model)
+  set(bearing_model_DEVEL_PREFIX /home/tyrell/Skripsi/devel)
   set(bearing_model_INSTALL_PREFIX "")
   set(bearing_model_PREFIX ${bearing_model_DEVEL_PREFIX})
 else()
   set(bearing_model_SOURCE_PREFIX "")
   set(bearing_model_DEVEL_PREFIX "")
-  set(bearing_model_INSTALL_PREFIX /home/tyrell/conveyorBelt_ws/install)
+  set(bearing_model_INSTALL_PREFIX /home/tyrell/Skripsi/install)
   set(bearing_model_PREFIX ${bearing_model_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/tyrell/conveyorBelt_ws/install/lib;/home/tyrell/conveyorBelt_ws/devel/lib;/home/tyrell/SmachROS/devel/lib;/home/tyrell/fukuro_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/tyrell/Skripsi/install/lib;/home/tyrell/Skripsi/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

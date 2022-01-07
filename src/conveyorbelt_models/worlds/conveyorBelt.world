@@ -20,11 +20,11 @@
 
     <!--Set up the solver used for simulation-->
     <physics name="ode_70iters" type="ode">
-	<real_time_update_rate>1000</real_time_update_rate>
+	<real_time_update_rate>1080</real_time_update_rate>
 	<ode>
 	    <solver>
 	        <type>quick</type>
-		<iters>44</iters>
+		<iters>55</iters>
 	    </solver>
 	</ode>
     </physics>

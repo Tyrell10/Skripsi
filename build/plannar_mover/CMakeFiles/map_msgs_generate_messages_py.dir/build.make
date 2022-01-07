@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tyrell/conveyorBelt_ws/src
+CMAKE_SOURCE_DIR = /home/tyrell/Skripsi/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tyrell/conveyorBelt_ws/build
+CMAKE_BINARY_DIR = /home/tyrell/Skripsi/build
 
 # Utility rule file for map_msgs_generate_messages_py.
 
@@ -63,10 +63,10 @@ plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/build: map_msgs_gener
 .PHONY : plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/build
 
 plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/clean:
-	cd /home/tyrell/conveyorBelt_ws/build/plannar_mover && $(CMAKE_COMMAND) -P CMakeFiles/map_msgs_generate_messages_py.dir/cmake_clean.cmake
+	cd /home/tyrell/Skripsi/build/plannar_mover && $(CMAKE_COMMAND) -P CMakeFiles/map_msgs_generate_messages_py.dir/cmake_clean.cmake
 .PHONY : plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/clean
 
 plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/depend:
-	cd /home/tyrell/conveyorBelt_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/conveyorBelt_ws/src /home/tyrell/conveyorBelt_ws/src/plannar_mover /home/tyrell/conveyorBelt_ws/build /home/tyrell/conveyorBelt_ws/build/plannar_mover /home/tyrell/conveyorBelt_ws/build/plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/tyrell/Skripsi/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tyrell/Skripsi/src /home/tyrell/Skripsi/src/plannar_mover /home/tyrell/Skripsi/build /home/tyrell/Skripsi/build/plannar_mover /home/tyrell/Skripsi/build/plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : plannar_mover/CMakeFiles/map_msgs_generate_messages_py.dir/depend
 

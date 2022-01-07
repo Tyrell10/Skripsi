@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/plannar_mover_plugin.dir/src/plannar_mover.cpp.o"
-  "/home/tyrell/conveyorBelt_ws/devel/lib/libplannar_mover_plugin.pdb"
-  "/home/tyrell/conveyorBelt_ws/devel/lib/libplannar_mover_plugin.so"
+  "/home/tyrell/Skripsi/devel/lib/libplannar_mover_plugin.pdb"
+  "/home/tyrell/Skripsi/devel/lib/libplannar_mover_plugin.so"
 )
 
 # Per-language clean rules from dependency scanning.
